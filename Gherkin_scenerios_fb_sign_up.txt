@@ -1,0 +1,75 @@
+Feature: Sign up page
+
+Background:
+    Given go to facebook.com in <browser> 
+    And click on Create New Account
+    
+    Examples: 
+    |Chrome|
+    |Firefox|
+    |Safari|
+
+---------------------------------------------------------------------------------
+
+Scenario: Create a new account with a valid mobile number
+    Given Entry valid credentials with mobile number
+    When click on Sign Up button
+    Then the user is forwarded on the confirmation mobile number page
+    And receive text message with a code on provided mobile number
+
+Scenario: Check a new account with a valid email address
+    Given Entry valid credentials with email address
+    When click on Sign Up button
+    Then the user is forwarded on the confirmation email address page
+    And receive an email with code on provided email address
+
+Scenario: Create a new account with a invalid mobile number
+    Given Entry valid credentials with invalid <mobile number>
+    When click on Sign Up button
+    Then an error message error message popups near email field
+
+    Examples: 
+    |777-333-222|
+    |+22|
+
+Scenario: Check a new account with a invalid email address
+    Given Entry valid credentials with invalid <email address>
+    When click on Sign Up button
+    Then an error message popup near email field
+    
+    Examples: 
+    |test@@test.com|
+    |test.com|
+
+Scenario: Verify empty fields validation
+    Given leaving all fields empty
+    When click on Sign Up button
+    Then “Whats your name?” error message popup near Name field
+
+Scenario: Verify validation for name and surname fields
+    Given: entry <invaild name> 
+    And entry <invalid surname> 
+    When: click on Sign Up button
+    Then the user receives an error message
+
+    Examples: 
+    | josh## | %%% |
+    | test123 | test123 |
+
+Scenario: Verify length validation for password field
+    Given entry less than 6 characters in <password field>
+    Then click on the Sign Up button
+    And a red highlighted statement saying the password is incorrect
+
+    Examples: 
+    | 222## |
+    | test1 | 
+    | te | 
+
+Scenario: Verify if gender radio button is editable
+    Given click on Woman gender radio button
+    When click on Man gender radio button
+    Then the radio button for the Man is highlighted blue
+    And the radio button for the Woman is NOT highlighted blue
+
+--------------------------------------------------------------------------------------------------------
